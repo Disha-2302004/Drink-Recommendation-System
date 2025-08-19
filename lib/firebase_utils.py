@@ -1,29 +1,21 @@
 import streamlit as st
-import pyrebase
 import firebase_admin
 from firebase_admin import credentials, firestore
 
 @st.cache_resource
-def get_auth_db():
-    try:
-        # Firebase Web API config (used by pyrebase for Auth)
-        fb_cfg = st.secrets["firebase"]["config"]
+def init_firebase():
+    # Access firebase config
+    firebase_config = st.secrets["firebase"]
 
-        # Firebase Service Account (used by firebase_admin for Firestore)
-        svc = st.secrets["firebase"]["service_account"]
-    except KeyError as e:
-        st.error(f"❌ Missing Firebase secret: {e}. Please check Streamlit Cloud → Settings → Secrets.")
-        st.stop()
+    # Access service account
+    service_account = st.secrets["firebase"]["service_account"]
 
-    # Initialize pyrebase for Authentication
-    firebase = pyrebase.initialize_app(dict(fb_cfg))
-    auth = firebase.auth()
-
-    # Initialize Firebase Admin SDK for Firestore (only once)
+    # Initialize Firebase only once
     if not firebase_admin._apps:
-        cred = credentials.Certificate(dict(svc))
-        firebase_admin.initialize_app(cred)
+        cred = credentials.Certificate(dict(service_account))
+        firebase_admin.initialize_app(cred, {
+            "storageBucket": firebase_config["storageBucket"]
+        })
 
-    db = firestore.client()
-
-    return auth, db
+    # Return Firestore client
+    return firestore.client()
