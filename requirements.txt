@@ -7,3 +7,4 @@ numpy
 transformers
 torch
 sentence-transformers
+pyrebase4
