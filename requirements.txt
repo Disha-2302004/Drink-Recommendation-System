@@ -1,0 +1,9 @@
+streamlit
+firebase-admin
+faiss-cpu
+scikit-learn
+pandas
+numpy
+transformers
+torch
+sentence-transformers
