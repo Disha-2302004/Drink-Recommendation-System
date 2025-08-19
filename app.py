@@ -1,7 +1,4 @@
 import streamlit as st
-from firebase_utils import init_firebase
-
-db = init_firebase()  # now you can use Firestore
 
 
 st.set_page_config(page_title="Drink Recommender", page_icon="🥤", layout="wide")
